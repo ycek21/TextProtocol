@@ -21,7 +21,7 @@ public class Client implements Runnable
 
 
 
-    public Client(ServerSocket server_socket, int session_id,Server serverserver)//konstruktor klasy CLIENT
+    public Client(ServerSocket server_socket, int session_id,Server serverserver)//konstruktor klasy CLIENT// client class contructor
     {
         try
         {
@@ -39,7 +39,7 @@ public class Client implements Runnable
 
             System.out.println(System.getProperty("line.separator"));
 
-            writePacket("IN", "NO", 0.0, 0.0, 0, session_id);//wyslanie pakietu inicjalizacyjnego
+            writePacket("IN", "NO", 0.0, 0.0, 0, session_id);//wyslanie pakietu inicjalizacyjnego //sending initializing packet
 
             System.out.println("Initialization packet has been sent.");
         }
@@ -51,11 +51,11 @@ public class Client implements Runnable
 
 
     @Override
-    public void run() //metoda czytająca pakiety tak długo jak nadchodzą
+    public void run() //metoda czytająca pakiety tak długo jak nadchodzą // void which reads packets as long as they come
     {
         try
         {
-            while(statement)//warunek odczytywania pakietów
+            while(statement)//warunek odczytywania pakietów // reading condition statement
             {
                 readPacket();
 
@@ -65,7 +65,7 @@ public class Client implements Runnable
     }
 
 
-    private void decodePacket(String packet)//funkcja dekokdująca pakietu oraz wykomnująca odpowiednie czynności
+    private void decodePacket(String packet)//funkcja dekokdująca pakietu oraz wykomnująca odpowiednie czynności// void which decode packets
     {
         double number;
         double number1;
@@ -73,17 +73,17 @@ public class Client implements Runnable
         int session_id;
         long time_stamp;
 
-        String[] message_table = packet.split("[$]");//Podzielenie calego pakietu na częsci rozdzielone symbolem $
+        String[] message_table = packet.split("[$]");//Podzielenie calego pakietu na częsci rozdzielone symbolem $ //splitting whole packets with $ symbol
 
-        Hashtable<String, String> command_split = new Hashtable<>();//Stworzenie tablicy z dwoma Stringami, która przechowywać będzie rodzaj pola oraz jego komunikat np. OP AD
+        Hashtable<String, String> command_split = new Hashtable<>();//Stworzenie tablicy z dwoma Stringami, która przechowywać będzie rodzaj pola oraz jego komunikat np. OP AD  // initalizing array with 2 string in one box which will contain type of field and message
 
-        ArrayList<String> command_list = new ArrayList<>();//Stworzenie tablicy przechowującej przeysłane pola, dzięki której możliwa jest odpowiednia reakcja na przesyłany komunikat
+        ArrayList<String> command_list = new ArrayList<>();//Stworzenie tablicy przechowującej przeysłane pola, dzięki której możliwa jest odpowiednia reakcja na przesyłany komunikat// array with command list, which will allow to proper reaction
 
 
 
         for(String element : message_table)
         {
-            String[] temporary = element.split("[=]");;//Rozdzielenie przesyłanego pakietu
+            String[] temporary = element.split("[=]");;//Rozdzielenie przesyłanego pakietu // splitting sended packet
 
             if(temporary.length == 2)
             {
@@ -94,7 +94,7 @@ public class Client implements Runnable
             }
         }
 
-        number = Double.parseDouble(command_split.get("N1"));//przypisanie odpowiednim zmiennym odebranych danych
+        number = Double.parseDouble(command_split.get("N1"));//przypisanie odpowiednim zmiennym odebranych danych // recieved data is assigned to variables
         number1 = Double.parseDouble(command_split.get("N2"));
         operation_id = Integer.parseInt(command_split.get("OI"));
         session_id = Integer.parseInt(command_split.get("ID"));
@@ -114,7 +114,7 @@ public class Client implements Runnable
         System.out.println("<DECODE> TS: " + time_stamp);
 
 
-        if(command_list.get(1).equals("AD") && command_list.get(3).equals("WR"))//odebranie pakietu od klienta, który ma wykonac operacje dodawania
+        if(command_list.get(1).equals("AD") && command_list.get(3).equals("WR"))//odebranie pakietu od klienta, który ma wykonac operacje dodawania //receiving packet with addition operation
         {
             double result;
 
@@ -122,12 +122,12 @@ public class Client implements Runnable
 
             writePacket("AD", "RS", result, -1, operation_id, session_id);
         }
-        else if(command_list.get(1).equals("EX") && command_list.get(3).equals("NO"))//odebranie pakietu, wyłączający programy
+        else if(command_list.get(1).equals("EX") && command_list.get(3).equals("NO"))//odebranie pakietu, wyłączający programy // packet which shuts down programms
         {
             System.exit(0);
 
         }
-        else if(command_list.get(1).equals("DC") && command_list.get(3).equals("NO"))//odebranie pakietu, iformującego o odłączeniu klienta
+        else if(command_list.get(1).equals("DC") && command_list.get(3).equals("NO"))//odebranie pakietu, iformującego o odłączeniu klienta //packet which informs that client has disconnected
         {
 
             System.out.println("Client "+ session_id+" disconnected! Waiting for another client");
@@ -135,7 +135,7 @@ public class Client implements Runnable
 
 
         }
-        else if(command_list.get(1).equals("LG") && command_list.get(3).equals("WR"))//odebranie pakietu, z danymi do logarytmowania
+        else if(command_list.get(1).equals("LG") && command_list.get(3).equals("WR"))//odebranie pakietu, z danymi do logarytmowania //logarithm packet
         {
             double result;
 
@@ -143,7 +143,7 @@ public class Client implements Runnable
 
             writePacket("LG", "RS", result, -1, operation_id, session_id);
         }
-        else if(command_list.get(1).equals("PW") && command_list.get(3).equals("WR"))//odebranie pakietu z danymi do operacji potęgowania
+        else if(command_list.get(1).equals("PW") && command_list.get(3).equals("WR"))//odebranie pakietu z danymi do operacji potęgowania//power packet
         {
             double result;
 
@@ -151,7 +151,7 @@ public class Client implements Runnable
 
             writePacket("PW", "RS", result, -1, operation_id, session_id);
         }
-        else if(command_list.get(1).equals("SB") && command_list.get(3).equals("WR"))//odebranie pakietu z danymi do odejmowania
+        else if(command_list.get(1).equals("SB") && command_list.get(3).equals("WR"))//odebranie pakietu z danymi do odejmowania //subtraction packet
         {
             double result;
 
@@ -159,7 +159,7 @@ public class Client implements Runnable
 
             writePacket("SB", "RS", result, -1, operation_id, session_id);
         }
-        else if(command_list.get(1).equals("HS") && command_list.get(3).equals("WH"))//odebranie pakietu z prosbą o przeslanie historii operacji na podstawie ID sesji
+        else if(command_list.get(1).equals("HS") && command_list.get(3).equals("WH"))//odebranie pakietu z prosbą o przeslanie historii operacji na podstawie ID sesji //packet with request of sending ID session history
         {
             if(session_id==number)
             {
@@ -176,7 +176,7 @@ public class Client implements Runnable
                 writePacket("HS","DC",-1,-1,operation_id,session_id);
             }
         }
-        else if(command_list.get(1).equals("HO") && command_list.get(3).equals("WH"))// //odebranie pakietu z prosbą o przeslanie historii operacji na podstawie ID operacji
+        else if(command_list.get(1).equals("HO") && command_list.get(3).equals("WH"))// //odebranie pakietu z prosbą o przeslanie historii operacji na podstawie ID operacji //packet with request of sending ID operation history
         {
 
             for(History element:operation_history)
@@ -195,7 +195,7 @@ public class Client implements Runnable
         }
     }
 
-    private String generatePacket(String operation, String status, double number, double number1, int operation_id, int session_id)//funkcja generująca i kodująca pakiet do zadanej postaci
+    private String generatePacket(String operation, String status, double number, double number1, int operation_id, int session_id)//funkcja generująca i kodująca pakiet do zadanej postaci// function which generates and codes packet
     {
         String packet = "";
 
@@ -211,7 +211,7 @@ public class Client implements Runnable
 
         return packet;
     }
-    private String generatePacket1(String operation, String status, double number, double number1, int operation_id, int session_id,long timeStamp)//funkcja generująca i kodująca pakiet do zadanej postaci do wysyłania historii
+    private String generatePacket1(String operation, String status, double number, double number1, int operation_id, int session_id,long timeStamp)//funkcja generująca i kodująca pakiet do zadanej postaci do wysyłania historii //function which generates and codes packet with history
     {
         String packet = "";
 
@@ -228,7 +228,7 @@ public class Client implements Runnable
         return packet;
     }
 
-    private void readPacket() throws Exception//metoda odczytująca pakiet
+    private void readPacket() throws Exception//metoda odczytująca pakiet //reading packets
     {
         char[] packet =new char[1024];
 
@@ -243,11 +243,11 @@ public class Client implements Runnable
         decodePacket(vpacket);
     }
 
-    private void writePacket(String operation, String status, double number, double number1, int operation_id, int session_id)//metoda wysyłająca pakiet
+    private void writePacket(String operation, String status, double number, double number1, int operation_id, int session_id)//metoda wysyłająca pakiet//sending packet function
     {
 
 
-        print_writer.println(generatePacket(operation, status, number, number1, operation_id, session_id));//metoda wysyłająca pakiet z historia
+        print_writer.println(generatePacket(operation, status, number, number1, operation_id, session_id));//metoda wysyłająca pakiet z historia //sending packet with history
     }
     private void writePacket1(String operation, String status, double number, double number1, int operation_id, int session_id,long timeStamp)
     {

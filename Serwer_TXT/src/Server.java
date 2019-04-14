@@ -19,10 +19,10 @@ public class Server
 
 
 
-    private Server() {} //konstruktor domyślny klasy Server
+    private Server() {} //konstruktor domyślny klasy Server //default constructor
 
 
-    private int generateSessionId()//funkcja generująca id sesji dla klientów
+    private int generateSessionId()//funkcja generująca id sesji dla klientów //function which generates sessionID
     {
         int session_id;
 
@@ -33,20 +33,20 @@ public class Server
         return session_id;
     }
 
-    private void startConnection()//metoda inicjująca połączenie serwera z klientem
+    private void startConnection()//metoda inicjująca połączenie serwera z klientem//function which initialize connection with client
     {
         try
         {
 
 
 
-            int session_id = generateSessionId();//generowanie ID dla klienta
+            int session_id = generateSessionId();//generowanie ID dla klienta //ClientID
 
             server_socket = new ServerSocket(1234);
 
-            Client client = new Client(server_socket, session_id,this);//utworzenie obieku CLIENT
+            Client client = new Client(server_socket, session_id,this);//utworzenie obieku CLIENT // creating client object
 
-            Thread thread = new Thread(client);//utworzenie wątku, który bedzie nasłuchwiał pakiety od klienta
+            Thread thread = new Thread(client);//utworzenie wątku, który bedzie nasłuchwiał pakiety od klienta //thread which will listen for client's packets
 
             thread.start();
 
@@ -56,7 +56,7 @@ public class Server
             int choice = 0;
 
             String temporary="";
-            while(true)//pętla,która reaguje na odpowiednie komunikaty wpisywane przez użytkownika
+            while(true)//pętla,która reaguje na odpowiednie komunikaty wpisywane przez użytkownika // loop which will react to adequate commands entered by user
             {
 
 
@@ -66,12 +66,12 @@ public class Server
 
 
 
-                if(temporary.equals("!history"))//wyświetlenie historii
+                if(temporary.equals("!history"))//wyświetlenie historii // displaying history
                 {
 
                     System.out.println("Choose a way of searching: \n1.SessionID\n2.OperationID\n3.Display all");
                     choice=read.nextInt();
-                    if(choice==1)//wyświetlenie historii po konkretnym ID sesji
+                    if(choice==1)//wyświetlenie historii po konkretnym ID sesji  //displaying history by sessionID
                     {
                         System.out.println("Type a sessionID");
                         System.out.println("Your session ID = "+session_id);
@@ -133,9 +133,9 @@ public class Server
 
                         System.out.println("Type a operationID");
                         number=read.nextInt();
-                        //Wyswietlenie historii dla konkretnego działania
+                        //Wyswietlenie historii dla konkretnego działania //displaying history for exact operationID
 
-                        for(History element: client.operation_history)//instrukcja warunkowa, która sprawdza rodzaj operacji w historii do wyświetlenia
+                        for(History element: client.operation_history)//instrukcja warunkowa, która sprawdza rodzaj operacji w historii do wyświetlenia //looking for exact type of operation
                         {
                             if(element.type.equals("AD")&& element.operation_ID==number) {
                                 System.out.println("Operation: " + element.type);
@@ -185,9 +185,9 @@ public class Server
 
 
                     }
-                    else if(choice==3)//wyświetlenie całej zapisanej historii
+                    else if(choice==3)//wyświetlenie całej zapisanej historii //dispalying whole history
                     {
-                        for(History element: client.operation_history)//instrukcja warunkowa, która sprawdza rodzaj operacji w historii do wyświetlenia
+                        for(History element: client.operation_history)//instrukcja warunkowa, która sprawdza rodzaj operacji w historii do wyświetlenia//looking for exact type of operation
                         {
                             if(element.type.equals("AD")) {
                                 System.out.println("Operation: " + element.type);
@@ -252,7 +252,7 @@ public class Server
 
     }
 
-    private void stopConnection()//metoda zamykająca serwer
+    private void stopConnection()//metoda zamykająca serwer // void which closes socket
     {
         try
         {
@@ -269,12 +269,12 @@ public class Server
     {
 
         System.setProperty("line.separator", "");
-        Server server = new Server();//tworzenie obiektu typu Serwer
+        Server server = new Server();//tworzenie obiektu typu Serwer//creating server object
 
 
         while(condition) {
-            server.startConnection();//wystartowanie serwera i łącznie klientów
-            server.stopConnection();//wyłączenie serwera
+            server.startConnection();//wystartowanie serwera i łącznie klientów //starting server
+            server.stopConnection();//wyłączenie serwera//turning off server
         }
 
     }

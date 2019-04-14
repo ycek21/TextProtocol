@@ -1,4 +1,4 @@
-public class History {//klasa wykorzystywana przy tworzeniu historii operacji
+public class History {//klasa wykorzystywana przy tworzeniu historii operacji// class which is used to store operation history
 
     public String type;
     public double number;
